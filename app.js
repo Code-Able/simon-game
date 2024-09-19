@@ -2,6 +2,8 @@ let randomPattern = [];
 let userPattern = [];
 let timeoutCounter = 1000;
 let score = 0;
+let highScore = localStorage.getItem("high-score") || 0;
+
 
 const greenBtn = document.querySelector('.part1');
 const redBtn = document.querySelector('.part2');
@@ -112,7 +114,10 @@ function displayPattern() {
                 setTimeout(() => generateItem(), randomPattern.length * 1000);
                 userPattern = [];
                 score++;
-                scoreDisplay.textContent = `Score: ${score}`;
+                highScore = score >= highScore ? score : highScore;
+                localStorage.setItem("high-score", highScore);
+
+                scoreDisplay.textContent = `Score: ${score},  High Score: ${highScore}`;
             }, 1000); // 1000 ms delay before displaying the pattern
             
         } else {
@@ -123,7 +128,7 @@ function displayPattern() {
             userPattern = [];
             setTimeout(() => generateItem(), 1000); // Adding a delay before resetting
             score = 0;
-            scoreDisplay.textContent = `Score: ${score}`;
+            scoreDisplay.textContent = `Score: ${score}, High Score: ${highScore}`;
         }
     }
 }
@@ -135,6 +140,7 @@ startStopBtn.addEventListener('click', () => {
     startStopBtn.classList.add('hide');
     scoreDisplay.classList.remove('hide');
     scoreDisplay.classList.add('score');
+    scoreDisplay.textContent = `Score: ${score}, High Score: ${highScore}`;
     
     let colorTimeoutHandle;
     generateItem();
